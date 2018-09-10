@@ -81,6 +81,7 @@ public class SeccionView extends AppCompatActivity {
                     intent.putExtra("pagina", pagina);
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+                    speakRequest.stopSpeak();
                     finish();
                 }else {
                     Intent intent = new Intent(SeccionView.this, HistoriaDetalle.class);
@@ -100,7 +101,7 @@ public class SeccionView extends AppCompatActivity {
                 pagina += 1;
                 intent.putExtra("pagina", pagina);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
-
+                speakRequest.stopSpeak();
                 startActivity(intent);
                 finish();
             }
