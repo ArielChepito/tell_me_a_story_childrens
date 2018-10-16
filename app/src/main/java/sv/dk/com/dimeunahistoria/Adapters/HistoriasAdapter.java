@@ -20,9 +20,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import sv.dk.com.dimeunahistoria.HistoriaDetalle;
 import sv.dk.com.dimeunahistoria.Modelos.Historia;
+import sv.dk.com.dimeunahistoria.Modelos.Story;
 import sv.dk.com.dimeunahistoria.R;
 
 /**
@@ -31,13 +33,13 @@ import sv.dk.com.dimeunahistoria.R;
 
 public class HistoriasAdapter extends RecyclerView.Adapter<HistoriasAdapter.ViewHolder> {
 
-    private ArrayList<Historia> listaHistorias;
+    private List<Story> listaHistorias;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
     private Context context;
     private int lastPosition = -1;
 
-    public HistoriasAdapter(Context context, ArrayList<Historia> listaHistorias) {
+    public HistoriasAdapter(Context context, List<Story> listaHistorias) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.listaHistorias = listaHistorias;
@@ -54,11 +56,12 @@ public class HistoriasAdapter extends RecyclerView.Adapter<HistoriasAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
        // holder.myTextView.setText(mData[position]);
-        holder.titulo.setText(listaHistorias.get(position).getTitulo());
-        holder.autor.setText(listaHistorias.get(position).getAutor());
+        holder.titulo.setText(listaHistorias.get(position).getName());
+        holder.autor.setText("Papa jhons");
         holder.portada.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        holder.categoria.setText(listaHistorias.get(position).getCategoria());
-        Glide.with(holder.portada.getContext()).load(listaHistorias.get(position).getPortada()).into(holder.portada);
+        holder.categoria.setText(listaHistorias.get(position).getCategory().getName());
+        //Glide.with(holder.portada.getContext()).load(listaHistorias.get(position).getPortada()).into(holder.portada);
+        Glide.with(holder.portada.getContext()).load("https://www.guiainfantil.com/uploads/ocio/carrerazapatillas-p.jpg").into(holder.portada);
     }
 
     @Override

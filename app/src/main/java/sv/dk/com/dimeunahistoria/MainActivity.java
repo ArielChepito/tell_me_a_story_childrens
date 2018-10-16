@@ -35,12 +35,14 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import sv.dk.com.dimeunahistoria.Adapters.HistoriasAdapter;
 import sv.dk.com.dimeunahistoria.Modelos.Historia;
+import sv.dk.com.dimeunahistoria.Modelos.ResponseData;
+import sv.dk.com.dimeunahistoria.Modelos.Story;
 
 public class MainActivity extends AppCompatActivity implements HistoriasAdapter.ItemClickListener {
 
     RecyclerView recyclerView;
     HistoriasAdapter adaptador;
-    ArrayList<Historia> listaHistorias;
+    List<Story> listaHistorias;
     SwipeRefreshLayout swipeRefreshLayout;
 
     Gson gson = new GsonBuilder()
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements HistoriasAdapter.
             .build();
 
     ServicioHistorias apiService = retrofit.create(ServicioHistorias.class);
-    Call<List<Historia>> call = apiService.getHistorias();
+    Call<ResponseData> call = apiService.getHistorias();
 
 
     @Override
@@ -92,8 +94,8 @@ public class MainActivity extends AppCompatActivity implements HistoriasAdapter.
     @Override
     public void onItemClick(View view, int position) {
 
-        Historia historia = new Historia();
-        historia = listaHistorias.get(position);
+
+        Story historia = listaHistorias.get(position);
 
         Intent intent = new Intent(this, HistoriaDetalle.class);
         intent.putExtra("historia", historia);
@@ -101,10 +103,10 @@ public class MainActivity extends AppCompatActivity implements HistoriasAdapter.
     }
 
     private void CallBackAll() {
-        call.enqueue(new Callback<List<Historia>>() {
+        call.enqueue(new Callback<ResponseData>() {
             @Override
-            public void onResponse(Call<List<Historia>> call, Response<List<Historia>> response) {
-                listaHistorias = (ArrayList<Historia>) response.body();
+            public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
+                listaHistorias = response.body().getData();
                 recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 1));
                 adaptador = new HistoriasAdapter(MainActivity.this, listaHistorias);
                 recyclerView.setAdapter(adaptador);
@@ -113,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements HistoriasAdapter.
             }
 
             @Override
-            public void onFailure(Call<List<Historia>> call, Throwable t) {
+            public void onFailure(Call<ResponseData> call, Throwable t) {
                 Log.d("UDBLOG:Error",t.getMessage());
                 swipeRefreshLayout.setRefreshing(false);
                 Toast desconectado = Toast.makeText(MainActivity.this, "Desconectado", Toast.LENGTH_LONG);
